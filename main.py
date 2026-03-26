@@ -92,70 +92,43 @@ def abrir_analisis_num ():
     # Botón para regresar al menú principal llamando a la función de cierre
     botonw1_2 = tk.Button(canva2, text="Volver", command=lambda: cerrar_window1())
     botonw1_2.pack(pady=5)
-
-    # Mantiene la ventana activa y escuchando eventos (clicks, teclas)
-    window1.mainloop()
-
-    
+     
 #Ventana de Ficha personal
-def ficha_personal():
-    # 1. ACCESO A ESTADOS GLOBALES
-    # 'win_open' controla si hay ventanas activas y 'music_on' el estado del audio
+def ficha_personal ():
     global win_open, music_on
-    
-    # 2. CONTROL DE INSTANCIA (EVITAR DUPLICADOS)
-    # Verifica si la variable win_open ya tiene una ventana y si esa ventana aún existe físicamente
-    if win_open is not None and win_open.winfo_exists():
-        win_open.lift()  # Si ya existe, la trae al frente de la pantalla
-        return           # Sale de la función para no crear una segunda ventana igual
-    
-    # 3. CREACIÓN DE LA VENTANA SECUNDARIA
-    window2 = tk.Toplevel()        # Crea una ventana hija de la principal
-    win_open = window2             # Guarda esta nueva ventana en la variable global de control
-    window2.title("Ficha personal") # Define el título que aparece en la barra superior
-    window2.geometry("700x700")   
-    window2.resizable(False, False) # Bloquea el cambio de tamaño para no arruinar el diseño
-    
-    # 4. CONFIGURACIÓN DEL SISTEMA DE AUDIO
-    pg.mixer.init()          # Inicializa el módulo de sonido de Pygame
-    # Carga el archivo de música 
-    pg.mixer.music.load("Cancionmp3.mp3") 
-    
-    # 5. FUNCIÓN INTERNA DE CIERRE LIMPIO
+    if  win_open is not None and win_open.winfo_exists():
+        win_open.lift()
+        return
+    window2 = tk.Toplevel()
+    win_open = window2
+    window2.title("Ficha personal")
+    window2.geometry("700x700")
+    window2.resizable(False, False)
+    pg.mixer.init()
+    pg.mixer.music.load("resources/Cancionmp3.mp3")
     def cerrar_window2():
         global win_open
-        win_open = None            # Resetea la variable global para permitir abrir ventanas a futuro
-        pg.mixer.music.stop()      # Detiene la música inmediatamente para que no siga sonando sola
-        window2.destroy()          # Cierra la ventana y libera la memoria RAM
-        
-    # 6. CREACIÓN CANVA
-    # Crea un lienzo de color mostaza (#D69D17) donde se colocarán las fotos y textos
+        win_open = None
+        window2.destroy()
     canva3 = tk.Canvas(window2, bg="#D69D17", width=700, height=700)
-    
-    # Empaqueta el canvas para que ocupe todo el espacio disponible en la ventana
     canva3.pack(fill="both", expand=True)
-    # SECCIÓN DE DATOS PERSONALES
-    tk.Label(canva3, text="MI FICHA PERSONAL", font=("TimesNewRoman", 20, "bold"), bg="#D49D1B").pack(pady=10) # Título principal
-    tk.Label(canva3, text="Nombre: Francisco Li Ruiz", bg="#D69D17", font=("TimesNewRoman", 11)).pack() # Datos personales
+    tk.Label(canva3, text="MI FICHA PERSONAL", font=("TimesNewRoman", 20, "bold"), bg="#D49D1B").pack(pady=10)
+    tk.Label(canva3, text="Nombre: Francisco Li Ruiz", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
     tk.Label(canva3, text="Carné: 2026014113", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
     tk.Label(canva3, text="Edad: 17 años", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
-    
-    # tk.Message se usa para bloques de texto largos; ajusta el texto automáticamente al ancho (width)
     Biotext="Biografía: Soy estudiante de ingeniería en computadores en el TEC, actualmente vivo en una residencia como a 300 metros de la entrada principal del TEC pero originialmente soy de Barva, Heredia. Me gusta tocar piano, entrenar, disfruto mucho comer de todo y esta es mi primer interfaz gráfica utilizando tkinter."
     lbl_Biotext = tk.Message(canva3, text=Biotext, bg="#D69D17", font=("TimesNewRoman", 11), width=400)
     lbl_Biotext.pack()
     tk.Label(canva3, text="Géneros musicales favoritos: Indie pop, salsa, jazz, piano clásico", bg="#D69D17", font=("TimesNewRoman", 11), width=450).pack()
 
-    #  IMÁGENES (PILLOW) 
-    # Imagen 1: Foto personal
-    img_me = Image.open("resources/Me_image.JPEG").resize((170, 170)) # Carga y redimensiona
+    #Imagenes pillow
+    img_me = Image.open("resources/Me_image.JPEG").resize((170, 170))
     img1 = ImageTk.PhotoImage(img_me)
     label_img1 = tk.Label(canva3, image=img1, bg="#D69D17")
-    label_img1.image = img1 # Referencia necesaria para que el Garbage Collector no borre la imagen
-    label_img1.place(x=60, y=300) # Posicionamiento absoluto en píxeles
+    label_img1.image = img1
+    label_img1.place(x=60, y=300)
     tk.Label(canva3, text="Yo", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=60, y=380)
 
-    # Imagen 2: Donde vivo
     img_lugar = Image.open("resources/Place_image.JPEG").resize((170, 170))
     img2 = ImageTk.PhotoImage(img_lugar)
     label_img2 = tk.Label(canva3, image=img2, bg="#D69D17")
@@ -163,7 +136,6 @@ def ficha_personal():
     label_img2.place(x=60, y=500) 
     tk.Label(canva3, text="Donde Vivo", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=60, y=600)
 
-    # Imagen 3: Hobby
     img_hobby = Image.open("resources/Hobby_img.JPG").resize((170, 170))
     img3 = ImageTk.PhotoImage(img_hobby)
     label_img3 = tk.Label(canva3, image=img3, bg="#D69D17")
@@ -171,13 +143,33 @@ def ficha_personal():
     label_img3.place(x=500, y=300) 
     tk.Label(canva3, text="Mi hobby", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=500, y=380)
 
-    # Imagen 4: Artista
     img_artist = Image.open("resources/Artist_image.JPG").resize((170, 170))
     img4 = ImageTk.PhotoImage(img_artist)
     label_img4 = tk.Label(canva3, image=img4, bg="#D69D17")
     label_img4.image = img4
     label_img4.place(x=500, y=500) 
     tk.Label(canva3, text="Artista favorito", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=500, y=600)
+    def music_control():
+        global music_on
+        if music_on == False:
+            try:
+                pg.mixer.music.load("resources/Cancionmp3.mp3")
+                pg.mixer.music.play(-1)
+                music_on = True
+                music_btn.config(text="Detener", bg="#FF6666")
+            except:
+                print("Error: No se encontró el archivo de audio")
+        else:
+            pg.mixer.music.stop()
+            music_on = False
+            music_btn.config(text="Reproducir", bg="#66FF66")
+    music_btn = tk.Button(canva3, text="Reproducir", command=music_control, bg="#66FF66", width=15)
+    music_btn.place(x=300, y=600)
+    tk.Label(canva3,text="Audio de la canción", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=300, y=570)
+    botonw2_1 = tk.Button(canva3,text="Volver", command=lambda: cerrar_window2())
+    botonw2_1.place(x=5, y=5)
+
+
 
 
 #Canva y otros widgets de la ventana principal
