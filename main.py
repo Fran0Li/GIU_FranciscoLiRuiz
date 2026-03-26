@@ -109,15 +109,15 @@ label_imgB = tk.Label(canva1, image=imgB, bg="#D69D17")
 label_imgB.image = imgB
 label_imgB = tk.Label(canva1, image=imgB, width=WIDTH, height=HEIGHT).pack()
 
-labelV1 = tk.Label(ventana, text="Bienvenida a mi interfaz")
+labelV1 = tk.Label(ventana, text="Bienvenida a mi interfaz gráfica", font=("TimesNewRoman", 15, "bold"))
 labelV1.place(x=100, y=25)
 
 botonV1 = tk.Button(canva1, text="Analisis numérico",  command=lambda: abrir_analisis_num())
-botonV1.place(x=250, y=200)
+botonV1.place(x=300, y=400)
 
 botonV2 = tk.Button(canva1,text="Ficha personal", command=lambda:ficha_personal() )
-botonV2.place (x=300, y=300)
-ventana.mainloop()
+botonV2.place(x=100, y=400)
+
 
 
 ventana.mainloop()
