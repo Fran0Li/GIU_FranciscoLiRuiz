@@ -128,13 +128,57 @@ def ficha_personal():
         pg.mixer.music.stop()      # Detiene la música inmediatamente para que no siga sonando sola
         window2.destroy()          # Cierra la ventana y libera la memoria RAM
         
-    # 6. CREACIÓN DEL CONTENEDOR GRÁFICO (CANVAS)
+    # 6. CREACIÓN CANVA
     # Crea un lienzo de color mostaza (#D69D17) donde se colocarán las fotos y textos
     canva3 = tk.Canvas(window2, bg="#D69D17", width=700, height=700)
     
     # Empaqueta el canvas para que ocupe todo el espacio disponible en la ventana
     canva3.pack(fill="both", expand=True)
+    # SECCIÓN DE DATOS PERSONALES
+    tk.Label(canva3, text="MI FICHA PERSONAL", font=("TimesNewRoman", 20, "bold"), bg="#D49D1B").pack(pady=10) # Título principal
+    tk.Label(canva3, text="Nombre: Francisco Li Ruiz", bg="#D69D17", font=("TimesNewRoman", 11)).pack() # Datos personales
+    tk.Label(canva3, text="Carné: 2026014113", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
+    tk.Label(canva3, text="Edad: 17 años", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
     
+    # tk.Message se usa para bloques de texto largos; ajusta el texto automáticamente al ancho (width)
+    Biotext="Biografía: Soy estudiante de ingeniería en computadores en el TEC, actualmente vivo en una residencia como a 300 metros de la entrada principal del TEC pero originialmente soy de Barva, Heredia. Me gusta tocar piano, entrenar, disfruto mucho comer de todo y esta es mi primer interfaz gráfica utilizando tkinter."
+    lbl_Biotext = tk.Message(canva3, text=Biotext, bg="#D69D17", font=("TimesNewRoman", 11), width=400)
+    lbl_Biotext.pack()
+    tk.Label(canva3, text="Géneros musicales favoritos: Indie pop, salsa, jazz, piano clásico", bg="#D69D17", font=("TimesNewRoman", 11), width=450).pack()
+
+    #  IMÁGENES (PILLOW) 
+    # Imagen 1: Foto personal
+    img_me = Image.open("resources/Me_image.JPEG").resize((170, 170)) # Carga y redimensiona
+    img1 = ImageTk.PhotoImage(img_me)
+    label_img1 = tk.Label(canva3, image=img1, bg="#D69D17")
+    label_img1.image = img1 # Referencia necesaria para que el Garbage Collector no borre la imagen
+    label_img1.place(x=60, y=300) # Posicionamiento absoluto en píxeles
+    tk.Label(canva3, text="Yo", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=60, y=380)
+
+    # Imagen 2: Donde vivo
+    img_lugar = Image.open("resources/Place_image.JPEG").resize((170, 170))
+    img2 = ImageTk.PhotoImage(img_lugar)
+    label_img2 = tk.Label(canva3, image=img2, bg="#D69D17")
+    label_img2.image = img2
+    label_img2.place(x=60, y=500) 
+    tk.Label(canva3, text="Donde Vivo", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=60, y=600)
+
+    # Imagen 3: Hobby
+    img_hobby = Image.open("resources/Hobby_img.JPG").resize((170, 170))
+    img3 = ImageTk.PhotoImage(img_hobby)
+    label_img3 = tk.Label(canva3, image=img3, bg="#D69D17")
+    label_img3.image = img3
+    label_img3.place(x=500, y=300) 
+    tk.Label(canva3, text="Mi hobby", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=500, y=380)
+
+    # Imagen 4: Artista
+    img_artist = Image.open("resources/Artist_image.JPG").resize((170, 170))
+    img4 = ImageTk.PhotoImage(img_artist)
+    label_img4 = tk.Label(canva3, image=img4, bg="#D69D17")
+    label_img4.image = img4
+    label_img4.place(x=500, y=500) 
+    tk.Label(canva3, text="Artista favorito", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=500, y=600)
+
 
 #Canva y otros widgets de la ventana principal
 canva1 = tk.Canvas(ventana, bg="#209ACA", width=WIDTH, height=HEIGHT)
