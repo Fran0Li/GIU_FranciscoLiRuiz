@@ -34,5 +34,18 @@ def Analisis_num_aux (num, divisor):
         return [par] + Analisis_num_aux(num, divisor + 1)
     else:
         return Analisis_num_aux(num, divisor + 1)
+    
+#Ventana de análisis numérico.
+def abrir_analisis_num ():
+    global win_open
+    if  win_open is not None and win_open.winfo_exists():
+        win_open.lift()
+        return
+    window1 = tk.Toplevel()
+    win_open = window1
+    window1.title("Análisis númerico")
+    window1.geometry("500x500")
+    window1.resizable(False, False)
+   
 
 ventana.mainloop()
