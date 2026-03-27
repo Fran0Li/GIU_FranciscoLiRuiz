@@ -163,12 +163,36 @@ def ficha_personal ():
             pg.mixer.music.stop()
             music_on = False
             music_btn.config(text="Reproducir", bg="#66FF66")
-    music_btn = tk.Button(canva3, text="Reproducir", command=music_control, bg="#66FF66", width=15)
+    music_btn = tk.Button(canva3, text="Reproducir", command=music_control, bg="#66FF66", width=15, cursor="hand2")
     music_btn.place(x=300, y=600)
     tk.Label(canva3,text="Audio de la canción", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=300, y=570)
-    botonw2_1 = tk.Button(canva3,text="Volver", command=lambda: cerrar_window2())
+    botonw2_1 = tk.Button(canva3,text="Volver", command=lambda: cerrar_window2(), cursor="hand2")
     botonw2_1.place(x=5, y=5)
 
+def abrir_aniwindow():
+    global win_open, music_on
+    if  win_open is not None and win_open.winfo_exists():
+        win_open.lift()
+        return
+    aniwindow = tk.Toplevel()
+    win_open = aniwindow
+    aniwindow.title("Animación_de_Esferas")
+    aniwindow.geometry(f"{ANI_W}x650") # Dar un poco de espacio a los controles
+    aniwindow.resizable(False, False)
+    canvas_ani = tk.Canvas(aniwindow, bg="black", width=ANI_W, height=ANI_H)#Canvas utilizando las constantes de animación
+    canvas_ani.pack()
+    tk.Label(aniwindow, text="Control de  de Velocidad", font=("TimesNewRoman", 12, "bold")).pack(pady=5)#Controlador de velocidad
+    val_vel = tk.Scale(aniwindow, from_=1, to=10, orient="horizontal", length=400)#Barra de velociad
+    val_vel.set(5) #Asignar valor actual
+    val_vel.pack()
+    #Función para cerrar la ventana
+    def cerrar_aniwindow():
+        global win_open
+        win_open = None
+        aniwindow.destroy()
+
+    btn_volver = tk.Button(aniwindow, text="Volver", command=lambda: cerrar_aniwindow(), cursor="hand2")#Botón para volver a la ventana principal
+    btn_volver.pack(pady=10)
 
 
 
@@ -185,12 +209,14 @@ label_imgB = tk.Label(canva1, image=imgB, width=WIDTH, height=HEIGHT).pack()
 labelV1 = tk.Label(ventana, text="Bienvenida a mi interfaz gráfica", font=("TimesNewRoman", 15, "bold"))
 labelV1.place(x=100, y=25)
 
-botonV1 = tk.Button(canva1, text="Analisis numérico",  command=lambda: abrir_analisis_num())
+botonV1 = tk.Button(canva1, text="Analisis numérico",  command=lambda: abrir_analisis_num(), cursor="hand2")
 botonV1.place(x=300, y=400)
 
-botonV2 = tk.Button(canva1,text="Ficha personal", command=lambda:ficha_personal() )
+botonV2 = tk.Button(canva1,text="Ficha personal", command=lambda:ficha_personal(),cursor="hand2" )
 botonV2.place(x=100, y=400)
 
+botonV3 = tk.Button(canva1,text="Animación", command=lambda:abrir_aniwindow(),cursor="hand2" )
+botonV3.place(x=200, y=400)
 
 
 ventana.mainloop()
