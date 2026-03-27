@@ -110,6 +110,7 @@ def ficha_personal ():
         global win_open
         win_open = None
         window2.destroy()
+        
     canva3 = tk.Canvas(window2, bg="#D69D17", width=700, height=700)
     canva3.pack(fill="both", expand=True)
     tk.Label(canva3, text="MI FICHA PERSONAL", font=("TimesNewRoman", 20, "bold"), bg="#D49D1B").pack(pady=10)
@@ -169,6 +170,7 @@ def ficha_personal ():
     botonw2_1 = tk.Button(canva3,text="Volver", command=lambda: cerrar_window2(), cursor="hand2")
     botonw2_1.place(x=5, y=5)
 
+
 def abrir_aniwindow():
     global win_open, music_on
     if  win_open is not None and win_open.winfo_exists():
@@ -179,7 +181,7 @@ def abrir_aniwindow():
     aniwindow.title("Animación_de_Esferas")
     aniwindow.geometry(f"{ANI_W}x650") # Dar un poco de espacio a los controles
     aniwindow.resizable(False, False)
-    canvas_ani = tk.Canvas(aniwindow, bg="black", width=ANI_W, height=ANI_H)#Canvas utilizando las constantes de animación
+    canvas_ani = tk.Canvas(aniwindow, bg="#083E19", width=ANI_W, height=ANI_H)#Canvas utilizando las constantes de animación
     canvas_ani.pack()
     tk.Label(aniwindow, text="Control de  de Velocidad", font=("TimesNewRoman", 12, "bold")).pack(pady=5)#Controlador de velocidad
     val_vel = tk.Scale(aniwindow, from_=1, to=10, orient="horizontal", length=400)#Barra de velociad
@@ -194,9 +196,48 @@ def abrir_aniwindow():
     btn_volver = tk.Button(aniwindow, text="Volver", command=lambda: cerrar_aniwindow(), cursor="hand2")#Botón para volver a la ventana principal
     btn_volver.pack(pady=10)
 
+    # Creación de  esferas y donde inician
+    Es_1 = canvas_ani.create_oval(50, 50, 50 + (RADIO*2), 50 + (RADIO*2), fill="cyan", outline="white")
+    # Esfera 2: inicia abajo a la derecha
+    Es_2 = canvas_ani.create_oval(ANI_W-100, ANI_H-100, ANI_W-100 + (RADIO*2), ANI_H-100 + (RADIO*2), fill="red", outline="white")
+    # Recibe dx y dy de ambas esferas para saber su dirección y velocidad actual
+    #Función de rebote
+    def animar(dx1, dy1, dx2, dy2): # Recibe dx y dy de ambas esferas para saber su dirección y velocidad actual
+        if not aniwindow.winfo_exists():#Verifica si la ventana existe. Si se cerró, detiene la recursión
+            return
+        # Se divide entre 5 para normalizar el movimiento y que no sea demasiado brusco
+        v = val_vel.get() / 5
+    #Obtener posicion: .coord devuelve una lista [x1, y1, x2, y2]
+        # x1, y1 es la esquina superior izquierda; x2, y2 es la inferior derecha del círculo
+        c1 = canvas_ani.coords(Es_1)
+        c2 = canvas_ani.coords(Es_2)
+    #Rebote con paredes esfera 1
+        # Si x1 <= 0 (toca pared izquierda) o x2 >= ANI_W (toca pared derecha)
+        if c1[0] <= 0 or c1[2] >= ANI_W: 
+            dx1 = -dx1 # Invierte la dirección horizontal
+        # Si y1 <= 0 (toca techo) o y3 >= ANI_H (toca suelo)
+        if c1[1] <= 0 or c1[3] >= ANI_H: 
+            dy1 = -dy1 # Invierte la dirección vertical
+    #Rebote con paredes esfera 2
+    # Se aplica la misma lógica de inversión de signos para la segunda esfera
+        if c2[0] <= 0 or c2[2] >= ANI_W: 
+            dx2 = -dx2
+        if c2[1] <= 0 or c2[3] >= ANI_H: 
+            dy2 = -dy2
+    #Movimiento de esferas
+    # .move desplaza el objeto la cantidad de píxeles indicada (dx * factor de velocidad)
+        canvas_ani.move(Es_1, dx1 * v, dy1 * v)
+        canvas_ani.move(Es_2, dx2 * v, dy2 * v)
+    #Recursión
+        # .after espera 20 milisegundos y vuelve a llamar a 'animar'
+        # Se pasan los dx y dy actuales (que pudieron cambiar en los IF de arriba)
+        aniwindow.after(20, lambda: animar(dx1, dy1, dx2, dy2))
+    # Llamada inicial con velocidades distintas para que las esferas no lleven trayectorias idénticas
+    animar(6, 4, -4, -6)
+    
 
 
-#Canva y otros widgets de la ventana principal
+#Canva y widgets de la ventana principal
 canva1 = tk.Canvas(ventana, bg="#209ACA", width=WIDTH, height=HEIGHT)
 canva1.pack()
 
