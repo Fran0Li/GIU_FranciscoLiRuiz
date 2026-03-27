@@ -22,18 +22,18 @@ WIDTH = 500
 HEIGHT = 500
 #Función de análisis numérico.
 def Analisis_num (num):
-    if not isinstance (num, int):
+    if not isinstance (num, int):#Para que el número sea entero
         print("Error, ingrese un número entero.")
         return []
-    return Analisis_num_aux(abs(num), 1)
+    return Analisis_num_aux(abs(num), 1)#Resuelve el problema de entradas negativas
 def Analisis_num_aux (num, divisor):
-    if divisor * divisor > num:
+    if divisor * divisor > num:#Caso base
         return []
     if num % divisor == 0:
-        par = (divisor, num // divisor)
-        return [par] + Analisis_num_aux(num, divisor + 1)
+        par = (divisor, num // divisor)#Par ordenado a devolver
+        return [par] + Analisis_num_aux(num, divisor + 1)#Llamada recursiva
     else:
-        return Analisis_num_aux(num, divisor + 1)
+        return Analisis_num_aux(num, divisor + 1)#Llamada recursiva si no es divisible
     
 #Ventana de análisis numérico.
 def abrir_analisis_num ():
@@ -41,20 +41,20 @@ def abrir_analisis_num ():
     if  win_open is not None and win_open.winfo_exists():#Revisión de ventana
         win_open.lift()#Tirar ventana hacia delante
         return
-    # 1. CREACIÓN DE LA VENTANA SECUNDARIA (TOPLEVEL)
+    # Creación de primera ventana secundaroa de análisis numérico
     window1 = tk.Toplevel()
     win_open = window1  # Referenciamos la ventana en la variable global para evitar duplicados
     window1.title("Análisis númerico")
     window1.geometry("500x500")
     window1.resizable(False, False)
 
-    # 2. FUNCIÓN PARA CERRAR Y LIMPIAR REFERENCIAS
+    # Función para cerrar ventana
     def cerrar_window1():
         global win_open
         win_open = None  # Liberamos la variable global para que se pueda abrir de nuevo después
         window1.destroy() # Destruye el objeto de la ventana de la memoria
 
-    # 3. INTERFAZ GRÁFICA DENTRO DEL CANVAS
+    # Canvas
     # Creamos un Canvas para mantener la estética visual del proyecto
     canva2 = tk.Canvas(window1, bg="#F028D2", width=WIDTH, height=HEIGHT)
     canva2.pack(fill="both", expand=True)
@@ -69,7 +69,7 @@ def abrir_analisis_num ():
     label_result = tk.Label(canva2, text="Los pares son: ", fg="green", wraplength=350)
     label_result.pack(pady=20)
 
-    # 4.CONEXIÓN 
+    # Conexión 
     def Analisis_connect():
         user_text = entrada_text.get()  # Obtenemos lo que el usuario escribió
         
@@ -84,7 +84,7 @@ def abrir_analisis_num ():
             # Manejo de errores visual si el usuario ingresa letras o símbolos
             label_result.config(text="Error, ingrese solo números, y que sean enteros.", fg="red")
 
-    # 5. BOTONES DE ACCIÓN
+    #  Botones de acción
     # 'lambda' para que la función no se ejecute apenas se crea el botón, sino al hacer click
     botonw1 = tk.Button(canva2, text="Calcular pares ordenados", command=lambda: Analisis_connect())
     botonw1.pack(pady=5)
@@ -95,17 +95,17 @@ def abrir_analisis_num ():
      
 #Ventana de Ficha personal
 def ficha_personal ():
-    global win_open, music_on
-    if  win_open is not None and win_open.winfo_exists():
-        win_open.lift()
+    global win_open, music_on#Llamada a variables globales 
+    if  win_open is not None and win_open.winfo_exists():#Revisión de ventana
+        win_open.lift()#Tirarla hacia adelante
         return
-    window2 = tk.Toplevel()
+    window2 = tk.Toplevel()#ventana secundaria número 2
     win_open = window2
     window2.title("Ficha personal")
     window2.geometry("700x700")
     window2.resizable(False, False)
     pg.mixer.init()
-    pg.mixer.music.load("resources/Cancionmp3.mp3")
+    pg.mixer.music.load("resources/Cancionmp3.mp3")#importaci
     def cerrar_window2():
         global win_open
         win_open = None
@@ -224,16 +224,37 @@ def abrir_aniwindow():
             dx2 = -dx2
         if c2[1] <= 0 or c2[3] >= ANI_H: 
             dy2 = -dy2
+        #Centro de las esferas
+        # (x1 + x2) / 2 es el  centro en X
+        # (y1 + y2) / 2 es el centro en Y
+        centro1x = (c1[0] + c1[2]) / 2
+        centro1y = (c1[1] + c1[3]) / 2
+        centro2x = (c2[0] + c2[2]) / 2
+        centro2y = (c2[1] + c2[3]) / 2
+        #Utilización de Teorema de Pitágoras para hallar al distancia
+        # La fórmula es: raíz cuadrada de ( (x2-x1)² + (y2-y1)² )
+        dist = ((centro1x - centro2x)**2 + (centro1y - centro2y)**2)**0.5
+        # Si la distancia es menor al diámetro (RADIO * 2 = 50), hay colisión
+        if dist <= (RADIO * 2):
+            # Intercambiamos velocidades: la esfera 1 toma la de la 2 y viceversa
+            dx1, dx2 = dx2, dx1
+            dy1, dy2 = dy2, dy1
+            #Las moví un poquito para que no se queden pegadas
+            canvas_ani.move(Es_1, dx1, dy1)
+            canvas_ani.move(Es_2, dx2, dy2)
+        
     #Movimiento de esferas
     # .move desplaza el objeto la cantidad de píxeles indicada (dx * factor de velocidad)
         canvas_ani.move(Es_1, dx1 * v, dy1 * v)
         canvas_ani.move(Es_2, dx2 * v, dy2 * v)
-    #Recursión
+    #Recursión del movimiento
         # .after espera 20 milisegundos y vuelve a llamar a 'animar'
         # Se pasan los dx y dy actuales (que pudieron cambiar en los IF de arriba)
         aniwindow.after(20, lambda: animar(dx1, dy1, dx2, dy2))
     # Llamada inicial con velocidades distintas para que las esferas no lleven trayectorias idénticas
     animar(6, 4, -4, -6)
+   
+
     
 
 
