@@ -9,8 +9,8 @@ music_on = False
 #Constantes de diseño
 WIDTH = 500
 HEIGHT = 500
-ANI_W = 800
-ANI_H = 500
+ANI_W = 500
+ANI_H = 400
 RADIO = 25
 
 ventana = tk.Tk()#Ventana principal
@@ -205,25 +205,30 @@ def abrir_aniwindow():
     def animar(dx1, dy1, dx2, dy2): # Recibe dx y dy de ambas esferas para saber su dirección y velocidad actual
         if not aniwindow.winfo_exists():#Verifica si la ventana existe. Si se cerró, detiene la recursión
             return
-        # Se divide entre 5 para normalizar el movimiento y que no sea demasiado brusco
+        # Se divide entre 5 o 4 para evitar que sea muy brusco,(entre menos se divida, más rápido pueden ir)
         v = val_vel.get() / 5
     #Obtener posicion: .coord devuelve una lista [x1, y1, x2, y2]
         # x1, y1 es la esquina superior izquierda; x2, y2 es la inferior derecha del círculo
         c1 = canvas_ani.coords(Es_1)
         c2 = canvas_ani.coords(Es_2)
-    #Rebote con paredes esfera 1
-        # Si x1 <= 0 (toca pared izquierda) o x2 >= ANI_W (toca pared derecha)
-        if c1[0] <= 0 or c1[2] >= ANI_W: 
-            dx1 = -dx1 # Invierte la dirección horizontal
-        # Si y1 <= 0 (toca techo) o y3 >= ANI_H (toca suelo)
-        if c1[1] <= 0 or c1[3] >= ANI_H: 
-            dy1 = -dy1 # Invierte la dirección vertical
-    #Rebote con paredes esfera 2
-    # Se aplica la misma lógica de inversión de signos para la segunda esfera
-        if c2[0] <= 0 or c2[2] >= ANI_W: 
-            dx2 = -dx2
-        if c2[1] <= 0 or c2[3] >= ANI_H: 
-            dy2 = -dy2
+    #Rebote con paredes esfera 1, solucion para no solo invertir mov
+        if c1[0] <= 0:
+            dx1 = abs(dx1)    # pared izquierda → empuja hacia la derecha
+        if c1[2] >= ANI_W:
+            dx1 = -abs(dx1)   # pared derecha → empuja hacia la izquierda
+        if c1[1] <= 0:
+            dy1 = abs(dy1)    # techo → empuja hacia abajo
+        if c1[3] >= ANI_H:
+            dy1 = -abs(dy1)   # suelo → empuja hacia arriba
+    #Rebote con paredes esfera 2, misma solución para la segunda esfera
+        if c2[0] <= 0:
+            dx2 = abs(dx2)
+        if c2[2] >= ANI_W:
+            dx2 = -abs(dx2)
+        if c2[1] <= 0:
+            dy2 = abs(dy2)
+        if c2[3] >= ANI_H:
+            dy2 = -abs(dy2)
         #Centro de las esferas
         # (x1 + x2) / 2 es el  centro en X
         # (y1 + y2) / 2 es el centro en Y
@@ -239,9 +244,21 @@ def abrir_aniwindow():
             # Intercambiamos velocidades: la esfera 1 toma la de la 2 y viceversa
             dx1, dx2 = dx2, dx1
             dy1, dy2 = dy2, dy1
-            #Las moví un poquito para que no se queden pegadas
-            canvas_ani.move(Es_1, dx1, dy1)
-            canvas_ani.move(Es_2, dx2, dy2)
+            solapamiento = (RADIO * 2) - dist + 1  # El +1 es para asegurar, es un margen de separación
+            
+            # Dirección del choque
+            # Evitamos división por cero, intentando resolver problema de pared de arriba
+            distancia_segura = max(0.1, dist)
+            nx = (centro2x - centro1x) / distancia_segura
+            ny = (centro2y - centro1y) / distancia_segura
+
+            
+            #Separación
+            # en dirección opuesta, lo que las despega sin mandarlas fuera
+            separacion = solapamiento / 2
+            
+            canvas_ani.move(Es_1, -nx * separacion, -ny * separacion)
+            canvas_ani.move(Es_2, nx * separacion, ny * separacion)
         
     #Movimiento de esferas
     # .move desplaza el objeto la cantidad de píxeles indicada (dx * factor de velocidad)
@@ -254,8 +271,6 @@ def abrir_aniwindow():
     # Llamada inicial con velocidades distintas para que las esferas no lleven trayectorias idénticas
     animar(6, 4, -4, -6)
    
-
-    
 
 
 #Canva y widgets de la ventana principal
