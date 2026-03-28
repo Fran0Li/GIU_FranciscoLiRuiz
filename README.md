@@ -1,1 +1,3 @@
 # GIU_FranciscoLiRuiz
+Se trata de una interfaz gráfica interactiva desarrollada en Python que utiliza las librerías **Tkinter**, **Pillow (PIL)** y **Pygame** para la gestión de una interfaz gráfica, visualización de imágenes y reproducción de audio. Contiene múltiples ventanas, una con una función de análisis numérico, otra con información personal del programador y una de una animación de esferas que sigue las leyes de la física.
+Para ejecutar este código es necesario tener instaladas las librerías **Pillow** y **pygame**, puedes instalarlas en la terminal con # pip install ..." y el nombre de la librería. Gracias por leer
