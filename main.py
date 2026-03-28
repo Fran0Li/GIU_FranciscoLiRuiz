@@ -104,13 +104,22 @@ def ficha_personal ():
     window2.title("Ficha personal")
     window2.geometry("700x700")
     window2.resizable(False, False)
+
+    window2.protocol("WM_DELETE_WINDOW", lambda: cerrar_window2())#Para que pare la música si se cierra con X
+
     pg.mixer.init()
     pg.mixer.music.load("resources/Cancionmp3.mp3")#importación de audio
     def cerrar_window2():
-        global win_open
+        global win_open, music_on
         win_open = None
         window2.destroy()
         
+
+        pg.mixer.music.stop()  # Detiene la música al cerrar
+        music_on = False        # Resetea el estado
+        win_open = None
+        window2.destroy()   
+
     canva3 = tk.Canvas(window2, bg="#D69D17", width=700, height=700)
     canva3.pack(fill="both", expand=True)#Para que cubra toda la ventana
     #Etiquetas de la información personal
@@ -119,17 +128,29 @@ def ficha_personal ():
     tk.Label(canva3, text="Carné: 2026014113", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
     tk.Label(canva3, text="Edad: 17 años", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
     Biotext="Biografía: Soy estudiante de ingeniería en computadores en el TEC, actualmente vivo en una residencia como a 300 metros de la entrada principal del TEC pero originialmente soy de Barva, Heredia. Me gusta tocar piano, entrenar, disfruto mucho comer de todo y esta es mi primer interfaz gráfica utilizando tkinter."
+
     lbl_Biotext = tk.Message(canva3, text=Biotext, bg="#D69D17", font=("TimesNewRoman", 11), width=400)
+
+    lbl_Biotext = tk.Message(canva3, text=Biotext, bg="#D69D17", font=("TimesNewRoman", 11), width=400)#Para adaptar el texto a el tamaño deseado
+
     lbl_Biotext.pack()
     tk.Label(canva3, text="Géneros musicales favoritos: Indie pop, salsa, jazz, piano clásico", bg="#D69D17", font=("TimesNewRoman", 11), width=450).pack()
 
     #Imagenes pillow
+
     img_me = Image.open("resources/Me_image.JPEG").resize((170, 170))
     img1 = ImageTk.PhotoImage(img_me)
     label_img1 = tk.Label(canva3, image=img1, bg="#D69D17")
     label_img1.image = img1
     label_img1.place(x=60, y=300)
     tk.Label(canva3, text="Yo", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=60, y=380)
+    img_me = Image.open("resources/Me_image.JPEG").resize((170, 170))#Tamaño de imagen
+    img1 = ImageTk.PhotoImage(img_me)
+    label_img1 = tk.Label(canva3, image=img1, bg="#D69D17")#Para que aparezca y se vea de acuerdo al fondo del canvas
+    label_img1.image = img1#Para que no desaparezca
+    label_img1.place(x=60, y=300)#Ubicación de la imágen
+    tk.Label(canva3, text="Yo", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=60, y=380)#Etiqueta que indica de que trata la imágen
+
 
     img_lugar = Image.open("resources/Place_image.JPEG").resize((170, 170))
     img2 = ImageTk.PhotoImage(img_lugar)
@@ -155,16 +176,17 @@ def ficha_personal ():
         global music_on
         if music_on == False:
             try:
-                pg.mixer.music.load("resources/Cancionmp3.mp3")
-                pg.mixer.music.play(-1)
-                music_on = True
-                music_btn.config(text="Detener", bg="#FF6666")
+                pg.mixer.music.load("resources/Cancionmp3.mp3")# Carga el archivo de audio desde la ruta especificada
+                pg.mixer.music.play(-1)# Reproduce la música en bucle infinito (-1 = repetir indefinidamente)
+                music_on = True# Actualiza el estado de la música a encendida
+                music_btn.config(text="Detener", bg="#FF6666")# Cambia el botón para indicar que ahora se puede detener la música
             except:
                 print("Error: No se encontró el archivo de audio")
         else:
-            pg.mixer.music.stop()
-            music_on = False
-            music_btn.config(text="Reproducir", bg="#66FF66")
+            pg.mixer.music.stop()# Si la música está sonando, se detiene
+            music_on = False#Actualiza estado
+            music_btn.config(text="Reproducir", bg="#66FF66")#Botón para que ahora se reproduzca
+
     music_btn = tk.Button(canva3, text="Reproducir", command=music_control, bg="#66FF66", width=15, cursor="hand2")
     music_btn.place(x=300, y=600)
     tk.Label(canva3,text="Audio de la canción", bg="#D69D17", font=("TimesNewRoman", 10, "bold")).place(x=300, y=570)
