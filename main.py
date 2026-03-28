@@ -105,14 +105,15 @@ def ficha_personal ():
     window2.geometry("700x700")
     window2.resizable(False, False)
     pg.mixer.init()
-    pg.mixer.music.load("resources/Cancionmp3.mp3")#importaci
+    pg.mixer.music.load("resources/Cancionmp3.mp3")#importación de audio
     def cerrar_window2():
         global win_open
         win_open = None
         window2.destroy()
         
     canva3 = tk.Canvas(window2, bg="#D69D17", width=700, height=700)
-    canva3.pack(fill="both", expand=True)
+    canva3.pack(fill="both", expand=True)#Para que cubra toda la ventana
+    #Etiquetas de la información personal
     tk.Label(canva3, text="MI FICHA PERSONAL", font=("TimesNewRoman", 20, "bold"), bg="#D49D1B").pack(pady=10)
     tk.Label(canva3, text="Nombre: Francisco Li Ruiz", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
     tk.Label(canva3, text="Carné: 2026014113", bg="#D69D17", font=("TimesNewRoman", 11)).pack()
