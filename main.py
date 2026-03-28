@@ -56,7 +56,7 @@ def abrir_analisis_num ():
 
     # Canvas
     # Creamos un Canvas para mantener la estética visual del proyecto
-    canva2 = tk.Canvas(window1, bg="#F028D2", width=WIDTH, height=HEIGHT)
+    canva2 = tk.Canvas(window1, bg="#B80E0E", width=WIDTH, height=HEIGHT)
     canva2.pack(fill="both", expand=True)
 
     # Widgets de entrada: Label (instrucción) y Entry (cuadro de texto)
@@ -290,7 +290,7 @@ botonV1 = tk.Button(canva1, text="Analisis numérico",  command=lambda: abrir_an
 botonV1.place(x=300, y=400)
 
 botonV2 = tk.Button(canva1,text="Ficha personal", command=lambda:ficha_personal(),cursor="hand2" )
-botonV2.place(x=100, y=400)
+botonV2.place(x=70, y=400)
 
 botonV3 = tk.Button(canva1,text="Animación", command=lambda:abrir_aniwindow(),cursor="hand2" )
 botonV3.place(x=200, y=400)
